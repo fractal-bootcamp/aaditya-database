@@ -51,4 +51,5 @@ model Rental {
   book   Book @relation(fields: [bookId], references: [id])
   member Member @relation(fields: [memberId], references: [id])
   borrowedAt DateTime @default(now())
+  returnedAt DateTime?
 }
