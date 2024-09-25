@@ -9,6 +9,33 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "postgresql" // or your preferred database
   url      = env("DATABASE_URL")
+}
+
+model Book {
+  id       Int      @id @default(autoincrement())
+  title    String
+  isbn     String   @unique
+  author   Author   @relation(fields: [authorId], references: [id])
+  authorId Int
+}
+
+model Author {
+  id         Int     @id @default(autoincrement())
+  name       String
+  biography  String?
+  books      Book[]
+}
+
+model Genre {
+  id     Int     @id @default(autoincrement())
+  name   String
+}
+
+model Member {
+  id      Int    @id @default(autoincrement())
+  name    String
+  email   String @unique
+  address String
 }
