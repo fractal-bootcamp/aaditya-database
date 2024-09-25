@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql" // or your preferred database
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -19,6 +19,8 @@ model Book {
   isbn     String   @unique
   author   Author   @relation(fields: [authorId], references: [id])
   authorId Int
+  genres   Genre[]  @relation("BookGenres")
+  rentals  Rental[]
 }
 
 model Author {
@@ -31,6 +33,7 @@ model Author {
 model Genre {
   id     Int     @id @default(autoincrement())
   name   String
+  books  Book[]  @relation("BookGenres")
 }
 
 model Member {
@@ -38,4 +41,14 @@ model Member {
   name    String
   email   String @unique
   address String
+  rentals Rental[]
+}
+
+model Rental {
+  id      Int @id @default(autoincrement())
+  bookId  Int
+  memberId Int
+  book   Book @relation(fields: [bookId], references: [id])
+  member Member @relation(fields: [memberId], references: [id])
+  borrowedAt DateTime @default(now())
 }
